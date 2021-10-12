@@ -21,6 +21,7 @@ router.get('/getQuestions', async (req, res) => {
 				res.send({ err })
 				return
 			} else {
+				console.log("Found is equal ", found)
 				idArray = found.map((item) => {
 					return item._id
 				})

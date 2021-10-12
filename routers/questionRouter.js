@@ -12,7 +12,6 @@ const admin = require("../middleware/admin");
 
 router.get('/getQuestions', async (req, res) => {
 
-	console.log(" Get question rout launched... ")
 	try {
 		let idArray = [];
 		let qArray = [];
@@ -21,13 +20,14 @@ router.get('/getQuestions', async (req, res) => {
 				res.send({ err })
 				return
 			} else {
-				console.log("Found is equal ", found)
 				idArray = found.map((item) => {
 					return item._id
 				})
 			}
 		})
-		console.log( " Id array is equal ", JSON.stringify(idArray))
+		if(!idArray.length){
+			logger("Warn", "Question array is empty", "/getQuestions", { idArray });
+		}
 		Promise.all(
 			getArray(idArray.length - 1).map(async (index) => {
 				let result = await getById(idArray[index])
@@ -39,9 +39,7 @@ router.get('/getQuestions', async (req, res) => {
 				})
 			}),
 		).then(() => {
-			console.log( " Question array is equal ", JSON.stringify(qArray)) 
-			res.send({ questions: [...qArray] })
-			return
+			return res.send({ questions: [...qArray] })
 		})
 	} catch (err) {
 		logger("Error", "Get questions error", "/getQuestions", { err });

@@ -11,6 +11,8 @@ const logger = require('../utils/logger');
 const admin = require("../middleware/admin");
 
 router.get('/getQuestions', async (req, res) => {
+
+	console.log(" Get question rout launched... ")
 	try {
 		let idArray = [];
 		let qArray = [];
@@ -24,6 +26,7 @@ router.get('/getQuestions', async (req, res) => {
 				})
 			}
 		})
+		console.log( " Id array is equal ", JSON.stringify(idArray))
 		Promise.all(
 			getArray(idArray.length - 1).map(async (index) => {
 				let result = await getById(idArray[index])
@@ -35,6 +38,7 @@ router.get('/getQuestions', async (req, res) => {
 				})
 			}),
 		).then(() => {
+			console.log( " Question array is equal ", JSON.stringify(qArray)) 
 			res.send({ questions: [...qArray] })
 			return
 		})
